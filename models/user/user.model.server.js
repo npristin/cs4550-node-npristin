@@ -25,12 +25,23 @@ function findUserByCredentials(username, password) {
   })
 }
 
+function findUserByUsername(username) {
+  console.log("finding by username!")
+  return userModel.findOne({username: username});
+}
+
+function register(user) {
+  return userModel.create(user);
+}
+
 var api = {
   createUser: createUser,
   findAllUsers: findAllUsers,
   findUserById: findUserById,
   updateUser: updateUser,
-  findUserByCredentials: findUserByCredentials
+  findUserByCredentials: findUserByCredentials,
+  findUserByUsername: findUserByUsername,
+  register: register
 };
 
 module.exports = api;
