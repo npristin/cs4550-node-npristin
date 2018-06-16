@@ -56,7 +56,7 @@ module.exports = function (app) {
         req.session['currentUser'] = user;
         res.send(user);
       } else {
-        res.send(0);}
+        res.send(204);}
       });
   }
 
