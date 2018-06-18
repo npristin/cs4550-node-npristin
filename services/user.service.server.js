@@ -4,14 +4,17 @@ module.exports = function (app) {
   app.post('/api/user', createUser);
   app.get('/api/profile', profile);
   app.put('/api/user/:userId', updateUser);
-  app.post('/api/login', findUserByCredentials);
+  app.post('/api/login', login);
   app.post('/api/logout', logout);
   app.post('/api/register', register);
+  app.get('/api/login/loggedin', loggedIn);
+  app.put('/api/profile', updateUser);
+  app.delete('/api/profile', deleteUser);
 
   var userModel = require('../models/user/user.model.server');
 
   function findUserById(req, res) {
-    var id = req.params['userId'];
+    var id = req.session['currentUser']._id;
     userModel.findUserById(id)
       .then(function (user) {
         res.json(user);
@@ -39,16 +42,24 @@ module.exports = function (app) {
   }
 
   function updateUser(req, res) {
-    var userId = req.params["userId"];
     var user = req.body;
+    var userId = req.session['currentUser']._id;
+    console.log("updating user!")
+    console.log(userId)
+
     userModel.updateUser(userId, user)
-      .then(function (user) {
-        req.session['currentUser'] = user;
-        res.send(user);
+      .then((response) => {
+        if (response) {
+          req.session['currentUser'] = response;
+          res.json(response);
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(400);
+        }
       })
   }
 
-  function findUserByCredentials(req, res) {
+  function login(req, res) {
     var username = req.body.username;
     var password = req.body.password;
     userModel.findUserByCredentials(username, password)
@@ -57,7 +68,7 @@ module.exports = function (app) {
         req.session['currentUser'] = user;
         res.send(user);
       } else {
-        res.send(204);}
+        res.sendStatus(204);}
       });
   }
 
@@ -69,7 +80,7 @@ module.exports = function (app) {
     userModel.findUserByUsername(username)
     .then((response) => {
       if(response) {
-        res.send(400);
+        res.sendStatus(400);
       } else {
         console.log("weeee")
         userModel.register(user)
@@ -80,9 +91,25 @@ module.exports = function (app) {
       }
     })
   }
+  function deleteUser(req, res) {
+      var userId = req.session['currentUser']._id;
+      userModel.deleteUser(userId)
+      .then(function (response) {
+          res.send(response);
+      })
+  }
+
+  function loggedIn(req, res) {
+    var user = req.session['currentUser'];
+    if (user === undefined) {
+        res.sendStatus(404);
+    } else {
+        res.sendStatus(200);
+    }
+  }
 
   function logout(req, res) {
      req.session.destroy();
-     res.send(200);
+     res.sendStatus(200);
   }
 }
