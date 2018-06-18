@@ -30,24 +30,11 @@ app.use(session({
   secret: 'any string'
 }));
 
-
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
-
-app.get('/message/:theMessage', function (req, res) {
-  var theMessage = req.params['theMessage'];
-  res.send(theMessage);
-})
-
 app.get('/api/session/set/:name/:value',
   setSession);
 app.get('/api/session/get/:name',
   getSession);
-// app.get('/api/session/get',
-//   getSessionAll);
-// app.get('/api/session/reset',
-//   resetSession);
+
 
 function setSession(req, res) {
   var name = req.params['name'];
@@ -65,5 +52,11 @@ function getSession(req, res) {
 
 var userService = require('./services/user.service.server');
 userService(app);
+
+var sectionService = require('./services/section.service.server');
+sectionService(app);
+
+var enrollmentService = require('./services/enrollment.service.server');
+enrollmentService(app);
 
 app.listen(4000);
