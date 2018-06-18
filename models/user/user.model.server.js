@@ -15,6 +15,7 @@ function findAllUsers() {
 }
 
 function updateUser(userId, newUser) {
+  console.log("updating user")
   return userModel.update({_id: userId},
           {$set: newUser})
 }
@@ -34,6 +35,10 @@ function register(user) {
   return userModel.create(user);
 }
 
+function deleteUser(userId) {
+    return userModel.remove({_id: userId});
+}
+
 var api = {
   createUser: createUser,
   findAllUsers: findAllUsers,
@@ -41,7 +46,8 @@ var api = {
   updateUser: updateUser,
   findUserByCredentials: findUserByCredentials,
   findUserByUsername: findUserByUsername,
-  register: register
+  register: register,
+  deleteUser: deleteUser
 };
 
 module.exports = api;
