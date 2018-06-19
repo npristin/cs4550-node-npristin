@@ -14,11 +14,23 @@ function findAllUsers() {
   return userModel.find();
 }
 
-function updateUser(userId, newUser) {
-  console.log("updating user")
-  return userModel.update({_id: userId},
-          {$set: newUser})
+function updateUser(user) {
+  return userModel.findOneAndUpdate(
+    {username: user.username},
+    {
+      $set: {
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        address: user.address
+      }
+    },
+    { new: true }
+    );
 }
+
 
 function findUserByCredentials(username, password) {
   return userModel.findOne({

@@ -3,7 +3,6 @@ module.exports = function (app) {
   app.get('/api/user/:userId', findUserById);
   app.post('/api/user', createUser);
   app.get('/api/profile', profile);
-  app.put('/api/user/:userId', updateUser);
   app.post('/api/login', login);
   app.post('/api/logout', logout);
   app.post('/api/register', register);
@@ -23,6 +22,8 @@ module.exports = function (app) {
 
   function profile(req, res) {
     res.send(req.session['currentUser']);
+    console.log("current user: ")
+    console.log(req.session['currentUser']);
   }
 
   function createUser(req, res) {
@@ -43,19 +44,12 @@ module.exports = function (app) {
 
   function updateUser(req, res) {
     var user = req.body;
-    var userId = req.session['currentUser']._id;
-    console.log("updating user!")
-    console.log(userId)
 
-    userModel.updateUser(userId, user)
-      .then((response) => {
-        if (response) {
-          req.session['currentUser'] = response;
-          res.json(response);
-          res.sendStatus(200);
-        } else {
-          res.sendStatus(400);
-        }
+    userModel.updateUser(user)
+      .then(function (response) {
+        console.log(response);
+        req.session['currentUser'] = response;
+        res.send(response);
       })
   }
 
