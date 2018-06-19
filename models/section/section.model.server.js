@@ -35,8 +35,16 @@ function findSectionById(sectionId) {
     return section;
 }
 
-function updateSection(section, sectionId) {
-    return sectionModel.update({_id: sectionId}, {$set: section});
+function updateSection(sectionName, sectionId) {
+    return sectionModel.findOneAndUpdate(
+      {_id: sectionId},
+      {
+        $set: {
+          name: sectionName
+        }
+      },
+      { new: true }
+    );
 }
 
 module.exports = {

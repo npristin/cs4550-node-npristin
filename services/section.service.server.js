@@ -17,9 +17,9 @@ module.exports = function (app) {
     }
 
     function updateSection(req, res) {
-        var section = req.body;
+        var sectionName = req.body.name;
         var sectionId = req.params['sectionId'];
-        sectionModel.updateSection(section, sectionId)
+        sectionModel.updateSection(sectionName, sectionId)
             .then(function (response) {
                 res.json(response);
             })
