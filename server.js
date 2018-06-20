@@ -54,4 +54,7 @@ sectionService(app);
 var enrollmentService = require('./services/enrollment.service.server');
 enrollmentService(app);
 
-app.listen(process.env.PORT || 4000);
+var port = process.env.PORT || 4000;
+app.listen(port, "0.0.0.0", function() {
+console.log("Listening on Port 4000");
+});
