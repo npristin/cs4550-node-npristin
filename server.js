@@ -54,7 +54,4 @@ sectionService(app);
 var enrollmentService = require('./services/enrollment.service.server');
 enrollmentService(app);
 
-app.listen(process.env.PORT || 4000, function (err) {
-  if (err) throw err
-  console.log('unable to connect to port')
-})
+app.listen(process.env.PORT || 4000);
