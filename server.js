@@ -56,5 +56,5 @@ enrollmentService(app);
 
 app.listen(process.env.PORT || 4000, function (err) {
   if (err) throw err
-  console.log(`server listening on ${app.server.address().port}`)
+  console.log('unable to connect to port')
 })
